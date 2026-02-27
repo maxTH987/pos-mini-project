@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>จัดการพนักงาน - POS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-light">
+
+<%- include('navbar') %>
+
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold"><i class="fa-solid fa-user-plus me-2"></i>เพิ่มพนักงานใหม่</div>
+                <div class="card-body">
+                    <form id="addStaffForm" onsubmit="addStaff(event)">
+                        <div class="mb-2"><label class="fw-bold">ชื่อผู้ใช้งาน (Username)</label><input type="text" id="username" class="form-control" required></div>
+                        <div class="mb-2"><label class="fw-bold">รหัสผ่าน</label><input type="password" id="password" class="form-control" required></div>
+                        <div class="mb-2"><label class="fw-bold">ชื่อ-นามสกุล</label><input type="text" id="name" class="form-control" required></div>
+                        <div class="mb-3">
+                            <label class="fw-bold">ตำแหน่ง (Role)</label>
+                            <select id="role" class="form-select">
+                                <option value="staff">พนักงานทั่วไป (Staff)</option>
+                                <option value="owner">เจ้าของร้าน (Owner)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">บันทึกข้อมูล</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white fw-bold"><i class="fa-solid fa-users-gear me-2"></i>รายชื่อพนักงานในระบบ</div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-3">Username</th>
+                                <th>ชื่อ-สกุล</th>
+                                <th>ตำแหน่ง</th>
+                                <th>จัดการ</th> </tr>
+                        </thead>
+                        <tbody>
+                            <% staffList.forEach(function(staff) { %>
+                                <tr>
+                                    <td class="ps-3"><%= staff.username %></td>
+                                    <td><%= staff.name %></td>
+                                    <td>
+                                        <% if(staff.role === 'owner') { %> <span class="badge bg-danger">Owner</span> 
+                                        <% } else { %> <span class="badge bg-secondary">Staff</span> <% } %>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning text-dark fw-bold mb-1" 
+                                            onclick="editStaff('<%= staff._id %>', '<%= staff.name %>', '<%= staff.role %>')">
+                                            <i class="fa-solid fa-pen-to-square"></i> แก้ไข
+                                        </button>
+                                        <button class="btn btn-sm btn-danger fw-bold mb-1" 
+                                            onclick="deleteStaff('<%= staff._id %>')">
+                                            <i class="fa-solid fa-trash"></i> ลบ
+                                        </button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // 1. เพิ่มพนักงาน
+    async function addStaff(e) {
+        e.preventDefault();
+        const data = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+            name: document.getElementById('name').value,
+            role: document.getElementById('role').value
+        };
+        const res = await fetch('/api/staff', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+        if(res.ok) { Swal.fire('สำเร็จ', 'เพิ่มพนักงานเรียบร้อย', 'success').then(() => window.location.reload()); } 
+        else { Swal.fire('ผิดพลาด', 'Username ซ้ำ หรือข้อมูลไม่ครบ', 'error'); }
+    }
+
+    // 2. แก้ไขพนักงาน
+    async function editStaff(id, oldName, oldRole) {
+        const { value: formValues } = await Swal.fire({
+            title: '✏️ แก้ไขพนักงาน',
+            html:
+                `<label class="text-start w-100 fw-bold mt-2">ชื่อ-นามสกุล</label>` +
+                `<input id="swal-name" class="swal2-input mt-0 mb-2" value="${oldName}">` +
+                `<label class="text-start w-100 fw-bold mt-2">ตำแหน่ง</label>` +
+                `<select id="swal-role" class="swal2-input mt-0 mb-2">
+                    <option value="staff" ${oldRole === 'staff' ? 'selected' : ''}>Staff (พนักงานทั่วไป)</option>
+                    <option value="owner" ${oldRole === 'owner' ? 'selected' : ''}>Owner (เจ้าของร้าน)</option>
+                </select>`,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: '💾 บันทึก',
+            cancelButtonText: 'ยกเลิก',
+            preConfirm: () => { return { name: document.getElementById('swal-name').value, role: document.getElementById('swal-role').value } }
+        });
+
+        if (formValues) {
+            const res = await fetch(`/api/staff/${id}`, { method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(formValues) });
+            if(res.ok) Swal.fire('สำเร็จ!', 'แก้ไขข้อมูลเรียบร้อย', 'success').then(() => window.location.reload());
+            else Swal.fire('ผิดพลาด', 'อัปเดตไม่สำเร็จ', 'error');
+        }
+    }
+
+    // 3. ลบพนักงาน
+    async function deleteStaff(id) {
+        const result = await Swal.fire({ 
+            title: 'แน่ใจหรือไม่?', 
+            text: "ข้อมูลพนักงานจะถูกลบถาวร!", 
+            icon: 'warning', 
+            showCancelButton: true, 
+            confirmButtonColor: '#d33', 
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'ใช่, ลบเลย!',
+            cancelButtonText: 'ยกเลิก'
+        });
+        if (result.isConfirmed) {
+            const res = await fetch(`/api/staff/${id}`, { method: 'DELETE' });
+            if(res.ok) Swal.fire('ลบแล้ว!', 'ลบพนักงานสำเร็จ', 'success').then(() => window.location.reload());
+            else Swal.fire('ผิดพลาด', 'ลบไม่ได้', 'error');
+        }
+    }
+</script>
+</body>
+</html>

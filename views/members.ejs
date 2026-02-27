@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>จัดการสมาชิก - POS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-light">
+
+<%- include('navbar') %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold">สมัครสมาชิกใหม่</div>
+                <div class="card-body">
+                    <form onsubmit="addMember(event)">
+                        <div class="mb-2">
+                            <label>เบอร์โทรศัพท์</label>
+                            <input type="text" id="phone" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>ชื่อสมาชิก</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">บันทึกข้อมูล</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-success text-white fw-bold">รายชื่อสมาชิกร้าน</div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-3">เบอร์โทร</th>
+                                <th>ชื่อสมาชิก</th>
+                                <th>แต้มสะสม</th>
+                                <th>จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% members.forEach(function(member) { %>
+                                <tr>
+                                    <td class="ps-3"><%= member.phone %></td>
+                                    <td><%= member.name %></td>
+                                    <td><span class="badge bg-warning text-dark"><%= member.points %> แต้ม</span></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-warning" onclick="editMember('<%= member._id %>', '<%= member.phone %>', '<%= member.name %>')">
+                                            ✏️ แก้ไข
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" onclick="deleteMember('<%= member._id %>')">
+                                            🗑️ ลบ
+                                        </button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                            <% if (members.length === 0) { %>
+                                <tr><td colspan="4" class="text-center text-muted py-3">ยังไม่มีสมาชิกในระบบ</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // 1.เพิ่มสมาชิก
+    async function addMember(e) {
+        e.preventDefault();
+        const data = {
+            phone: document.getElementById('phone').value,
+            name: document.getElementById('name').value
+        };
+
+        const res = await fetch('/api/members', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+
+        if(res.ok) {
+            Swal.fire('สำเร็จ', 'เพิ่มสมาชิกเรียบร้อย', 'success').then(() => window.location.reload());
+        } else {
+            Swal.fire('ผิดพลาด', 'เบอร์โทรนี้เป็นสมาชิกแล้ว', 'error');
+        }
+    }
+
+    // 2.แก้ไขสมาชิก
+    async function editMember(id, oldPhone, oldName) {
+        const { value: formValues } = await Swal.fire({
+            title: '✏️ แก้ไขข้อมูลสมาชิก',
+            html:
+                `<label class="text-start w-100">เบอร์โทรศัพท์</label>` +
+                `<input id="swal-phone" class="swal2-input mt-1 mb-3" value="${oldPhone}">` +
+                `<label class="text-start w-100">ชื่อสมาชิก</label>` +
+                `<input id="swal-name" class="swal2-input mt-1" value="${oldName}">`,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: '💾 บันทึก',
+            cancelButtonText: 'ยกเลิก',
+            preConfirm: () => {
+                return {
+                    phone: document.getElementById('swal-phone').value,
+                    name: document.getElementById('swal-name').value
+                }
+            }
+        });
+
+        if (formValues) {
+            try {
+                const res = await fetch(`/api/members/${id}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(formValues)
+                });
+
+                if(res.ok) {
+                    Swal.fire('สำเร็จ!', 'แก้ไขข้อมูลเรียบร้อยแล้ว', 'success').then(() => window.location.reload());
+                } else {
+                    // ดึงข้อความ Error จริงๆ จากหลังบ้านมาโชว์
+                    const errData = await res.json();
+                    Swal.fire('ผิดพลาด', errData.error || 'เบอร์โทรนี้อาจจะซ้ำกับคนอื่นในระบบ', 'error');
+                }
+            } catch(e) {
+                Swal.fire('ผิดพลาด', 'หาเส้นทาง API ไม่เจอ (อย่าลืม Save ไฟล์ memberRoutes.js นะครับ)', 'error');
+            }
+        }
+    }
+
+    // 3.ลบสมาชิก
+    async function deleteMember(id) {
+        const result = await Swal.fire({
+            title: 'คุณแน่ใจหรือไม่?',
+            text: "ข้อมูลนี้จะถูกลบอย่างถาวร!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'ใช่, ลบเลย!',
+            cancelButtonText: 'ยกเลิก'
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const res = await fetch(`/api/members/${id}`, { method: 'DELETE' });
+
+                if(res.ok) {
+                    Swal.fire('ลบแล้ว!', 'ลบสมาชิกออกจากระบบเรียบร้อย.', 'success').then(() => window.location.reload());
+                } else {
+                    const errData = await res.json();
+                    Swal.fire('ผิดพลาด', errData.error || 'ไม่สามารถลบข้อมูลได้', 'error');
+                }
+            } catch(e) {
+                Swal.fire('ผิดพลาด', 'เชื่อมต่อ API ไม่ได้', 'error');
+            }
+        }
+    }
+</script>
+</body>
+</html>

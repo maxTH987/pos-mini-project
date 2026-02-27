@@ -1,0 +1,136 @@
+<style>
+
+    body { 
+        background-color: #e3f2fd !important; 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    }
+
+    .bg-theme-blue { background: linear-gradient(90deg, #1e88e5, #1565c0) !important; }
+    .navbar-dark .navbar-nav .nav-link { color: #ffffff; font-weight: 500; font-size: 1.05rem; }
+    .navbar-dark .navbar-nav .nav-link:hover, 
+    .navbar-dark .navbar-nav .nav-link.active { color: #ffeb3b !important; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.1); }
+    .navbar-brand { color: #ffeb3b !important; font-weight: 800; font-size: 1.5rem; }
+    .text-theme-yellow { color: #ffeb3b !important; }
+    .btn-theme-logout { border: 2px solid #ffeb3b; color: #ffeb3b; font-weight: bold; border-radius: 8px; transition: 0.3s; }
+    .btn-theme-logout:hover { background-color: #ffeb3b; color: #1565c0; }
+
+    .card-header.bg-primary, 
+    .card-header.bg-success, 
+    .card-header.bg-dark, 
+    .card-header.bg-info {
+        background: linear-gradient(135deg, #1e88e5, #1565c0) !important;
+        color: #ffffff !important;
+        border-bottom: none;
+        font-weight: bold;
+    }
+
+    .table-light th { 
+        background-color: #bbdefb !important; 
+        color: #0d47a1 !important; 
+        border-bottom: 2px solid #64b5f6 !important; 
+    }
+
+    .btn-primary, 
+    .btn-success {
+        background-color: #ffc107 !important;
+        color: #000 !important;
+        border: none !important;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover, 
+    .btn-success:hover {
+        background-color: #ffb300 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+    }
+
+    .btn-outline-primary {
+        color: #1e88e5 !important;
+        border-color: #1e88e5 !important;
+        font-weight: bold;
+        transition: all 0.2s;
+    }
+    .btn-outline-primary:hover {
+        background-color: #1e88e5 !important;
+        color: #ffffff !important;
+    }
+
+    #reportResult .bg-info { background: linear-gradient(135deg, #42a5f5, #1e88e5) !important; }
+    #reportResult .bg-success { background: linear-gradient(135deg, #ffc107, #ffb300) !important; color: #000 !important; }
+    #reportResult .bg-warning { background: linear-gradient(135deg, #1565c0, #0d47a1) !important; color: #fff !important; }
+</style>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-theme-blue shadow-sm py-3">
+    <div class="container">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        
+        <a class="navbar-brand" href="/"><i class="fa-solid fa-cart-shopping me-2"></i> POS System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item"><a class="nav-link" href="/"><i class="fa-solid fa-store me-1"></i> หน้าแรก (ขาย)</a></li>
+                <li class="nav-item"><a class="nav-link" href="/products"><i class="fa-solid fa-box me-1"></i> จัดการสินค้า</a></li>
+                <li class="nav-item"><a class="nav-link" href="/members"><i class="fa-solid fa-users me-1"></i> สมาชิก</a></li>
+                
+                <li class="nav-item admin-only d-none"><a class="nav-link" href="/staff"><i class="fa-solid fa-user-tie me-1"></i> พนักงาน</a></li>
+                <li class="nav-item admin-only d-none"><a class="nav-link" href="/reports"><i class="fa-solid fa-chart-line me-1"></i> รายงาน</a></li>
+                
+                <li class="nav-item border-start ps-3 ms-3">
+                    <span class="nav-link text-theme-yellow fw-bold" id="userRoleText"><i class="fa-solid fa-spinner fa-spin"></i> โหลดข้อมูล...</span>
+                </li>
+                <li class="nav-item ms-3">
+                    <button class="btn btn-theme-logout btn-sm px-3 py-1" onclick="logout()"><i class="fa-solid fa-right-from-bracket me-1"></i> ออกจากระบบ</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<script>
+    const currentRole = localStorage.getItem('pos_role');
+    const currentName = localStorage.getItem('pos_name');
+    
+    if (!currentRole || !currentName) {
+        window.location.href = '/login';
+    } else {
+        applyRole(currentRole, currentName);
+    }
+
+    function logout() {
+        Swal.fire({
+            title: 'ออกจากระบบ?',
+            text: "คุณต้องการออกจากระบบใช่หรือไม่?",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'ใช่, ออกจากระบบ',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.clear(); 
+                window.location.href = '/login'; 
+            }
+        });
+    }
+
+    function applyRole(role, name) {
+        const roleIcon = role === 'owner' ? '<i class="fa-solid fa-crown"></i>' : '<i class="fa-solid fa-user"></i>';
+        document.getElementById('userRoleText').innerHTML = `${roleIcon} คุณ ${name}`;
+        
+        document.querySelectorAll('.admin-only').forEach(el => {
+            if (role === 'owner') {
+                el.classList.remove('d-none'); 
+            } else {
+                el.classList.add('d-none');    
+            }
+        });
+
+        if(role === 'staff' && (window.location.pathname === '/staff' || window.location.pathname === '/reports')) {
+            window.location.href = '/';
+        }
+    }
+</script>
