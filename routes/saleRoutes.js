@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Sale = require('../models/Sale');
 const Product = require('../models/Product');
-const Member = require('../models/Member'); // ดึงโมเดล Member มาใช้
+const Member = require('../models/Member');
 
-// API บันทึกการขาย ตัดสต๊อก และเพิ่มแต้มสมาชิก
 router.post('/', async (req, res) => {
     try {
         const saleData = req.body;
@@ -16,33 +15,32 @@ router.post('/', async (req, res) => {
         // 2. ตัดสต๊อกสินค้า
         for (let item of saleData.items) {
             await Product.findByIdAndUpdate(item.productId, {
-                $inc: { stock: -item.qty } // ลดสต๊อกตามจำนวนที่ซื้อ
+                $inc: { stock: -item.qty }
             });
         }
 
-        // 3. ระบบสะสมแต้ม (ถ้ามีการใส่เบอร์สมาชิกมา)
+        // 3. ระบบสะสมแต้ม
         let earnedPoints = 0;
         let memberName = "";
         
         if (saleData.memberPhone) {
-            // สมมติ: ยอดซื้อทุกๆ 10 บาท ได้ 1 แต้ม (เช่น ซื้อ 150 บาท ได้ 15 แต้ม)
+            // ซื้อทุกๆ 10 บาท ได้ 1 แต้ม
             earnedPoints = Math.floor(saleData.netTotal / 10); 
 
             // ค้นหาสมาชิกด้วยเบอร์โทร แล้วบวกแต้มเข้าไป
             const member = await Member.findOneAndUpdate(
                 { phone: saleData.memberPhone },
                 { $inc: { points: earnedPoints } },
-                { new: true } // ให้คืนค่าข้อมูลใหม่กลับมา
+                { new: true }
             );
 
             if (member) {
                 memberName = member.name;
             } else {
-                earnedPoints = 0; // ถ้าหาเบอร์ไม่เจอ ก็ไม่ได้แต้ม
+                earnedPoints = 0;
             }
         }
 
-        // ส่งผลลัพธ์กลับไปหน้าเว็บ พร้อมบอกแต้มที่ได้
         res.status(201).json({ 
             message: 'บันทึกการขายสำเร็จ', 
             earnedPoints: earnedPoints,

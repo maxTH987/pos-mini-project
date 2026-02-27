@@ -3,7 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-// ดึง Models มาเตรียมไว้ส่งข้อมูลไปที่หน้าเว็บ
 const Product = require('./models/Product'); 
 const Staff = require('./models/Staff');
 const Member = require('./models/Member');
@@ -38,7 +37,7 @@ app.get('/login', (req, res) => {
     res.render('login'); 
 });
 
-// 1. หน้าแรก (ขายสินค้า)
+// 1. หน้าแรก
 app.get('/', async (req, res) => {
     const products = await Product.find(); 
     res.render('index', { products: products }); 

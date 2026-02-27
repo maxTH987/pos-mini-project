@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// 1. API เพิ่มสินค้า
+// 1. เพิ่มสินค้า
 router.post('/', upload.single('imageFile'), async (req, res) => {
     try {
         let finalImageUrl = req.body.imageUrl || 'https://placehold.co/200x200?text=No+Image';
@@ -36,7 +36,7 @@ router.post('/', upload.single('imageFile'), async (req, res) => {
     }
 });
 
-// 2. API ดึงข้อมูลสินค้า
+// 2. ดึงข้อมูลสินค้า
 router.get('/', async (req, res) => {
     try {
         const products = await Product.find();
@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// 3. API แก้ไขข้อมูลสินค้า
+// 3. แก้ไขข้อมูลสินค้า
 router.put('/:id', upload.single('imageFile'), async (req, res) => {
     try {
         let updateData = { ...req.body };
@@ -61,7 +61,7 @@ router.put('/:id', upload.single('imageFile'), async (req, res) => {
     }
 });
 
-// 4. API ลบข้อมูลสินค้า
+// 4. ลบข้อมูลสินค้า
 router.delete('/:id', async (req, res) => {
     try {
         await Product.findByIdAndDelete(req.params.id);

@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// 3. API สำหรับแก้ไขข้อมูลสมาชิก
+// 3. แก้ไขข้อมูลสมาชิก
 router.put('/:id', async (req, res) => {
     try {
         const updatedMember = await Member.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -33,7 +33,7 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// 4. API สำหรับลบข้อมูลสมาชิก
+// 4. ลบข้อมูลสมาชิก
 router.delete('/:id', async (req, res) => {
     try {
         await Member.findByIdAndDelete(req.params.id);

@@ -26,7 +26,6 @@ function removeFromCart(id) {
 }
 
 // 3. อัปเดตหน้าจอคำนวณเงิน
-// 3. อัปเดตหน้าจอคำนวณเงิน
 function updateCart() {
     let cartHtml = '';
     let subTotal = 0;
@@ -40,7 +39,7 @@ function updateCart() {
         return;
     }
 
-    // คำนวณยอดรวมสินค้าในตะกร้า (ก่อนหักส่วนลด)
+    // คำนวณยอดรวมสินค้าในตะกร้า 
     cart.forEach((item) => {
         let itemTotal = item.price * item.qty;
         subTotal += itemTotal;
@@ -62,39 +61,31 @@ function updateCart() {
 
     document.getElementById('cart-items').innerHTML = cartHtml;
     
-    // ========================================================
-    // 🌟 ระบบโปรโมชั่นอัตโนมัติ: ซื้อครบ 500 บาท ลด 30 บาท
-    // ========================================================
-    // Math.floor(subTotal / 500) คือการหาว่ายอดเงินถึง 500 กี่รอบ
     let promoDiscount = Math.floor(subTotal / 500) * 30; 
 
-    // อัปเดตตัวเลขลงในช่องส่วนลดอัตโนมัติ
     document.getElementById('discount').value = promoDiscount;
 
-    // แสดงข้อความกระตุ้นยอดขาย
     let promoText = document.getElementById('promo-text');
     if (promoDiscount > 0) {
         promoText.innerHTML = `<span class="text-success fw-bold">ยินดีด้วย! คุณได้รับส่วนลดโปรโมชั่น ${promoDiscount} บาท</span>`;
     } else {
-        let needed = 500 - subTotal; // คำนวณว่าขาดอีกกี่บาทถึงจะได้ลด
+        let needed = 500 - subTotal;
         promoText.innerHTML = `<span class="text-muted" style="font-size: 0.85rem;">💡 ซื้ออีก <b>${needed} ฿</b> รับส่วนลด 30 บาททันที!</span>`;
     }
 
-    // คำนวณยอดสุทธิที่ต้องจ่ายจริง
     let netTotal = subTotal - promoDiscount;
     if (netTotal < 0) netTotal = 0;
 
-    // อัปเดตยอดสุทธิไปแสดงผล
     document.getElementById('total-price').innerText = netTotal.toLocaleString();
 }
 
-// 4. ชำระเงิน (ยิง API)
+// 4. ชำระเงิน
 async function checkout() {
     if (cart.length === 0) return Swal.fire('แจ้งเตือน', 'กรุณาเลือกสินค้าก่อนชำระเงิน!', 'warning');
 
     let discount = parseFloat(document.getElementById('discount').value) || 0;
     let amountPaid = parseFloat(document.getElementById('amount-paid').value) || 0;
-    let memberPhone = document.getElementById('member-phone').value.trim(); // ดึงเบอร์สมาชิกมา
+    let memberPhone = document.getElementById('member-phone').value.trim();
     
     let subTotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
     let netTotal = subTotal - discount;
@@ -111,11 +102,10 @@ async function checkout() {
         if(staffs.length === 0) return Swal.fire('Error', 'ไม่พบข้อมูลพนักงานในระบบ', 'error');
         const staffId = staffs[0]._id;
 
-        // จัดเตรียมข้อมูลส่งไปที่ API
         const saleData = {
             receiptNumber: "REC-" + Date.now(),
             staffId: staffId,
-            memberPhone: memberPhone, // ส่งเบอร์โทรไปด้วย
+            memberPhone: memberPhone,
             items: cart,
             subTotal: subTotal,
             discount: discount,
@@ -134,10 +124,9 @@ async function checkout() {
         if (response.ok) {
             const resultData = await response.json();
             
-            // สร้างข้อความแจ้งเตือนความสำเร็จ
+            // ข้อความแจ้งเตือน
             let successMsg = `เงินทอน: <b>${change} บาท</b><br><br>`;
             
-            // ถ้ามีการสะสมแต้ม ให้โชว์ข้อความพิเศษ
             if (resultData.earnedPoints > 0) {
                 successMsg += `<div class="p-2 bg-light rounded border border-warning">`;
                 successMsg += `<span class="text-success fw-bold">คุณ ${resultData.memberName}</span><br>`;

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Staff = require('../models/Staff');
 
-// 1. API สำหรับเพิ่มพนักงานใหม่
+// 1. เพิ่มพนักงานใหม่
 router.post('/', async (req, res) => {
     try {
         const newStaff = new Staff(req.body);
@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-// 2. API สำหรับดึงข้อมูลพนักงานทั้งหมด
+// 2. ดึงข้อมูลพนักงานทั้งหมด
 router.get('/', async (req, res) => {
     try {
         const staffList = await Staff.find();
@@ -23,18 +23,18 @@ router.get('/', async (req, res) => {
     }
 });
 
-// 5. API สำหรับ Login ตรวจสอบผู้ใช้งาน
+// 5. Login ตรวจสอบผู้ใช้งาน
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
-        // ค้นหาพนักงานที่มี username และ password ตรงกันในฐานข้อมูล
+        // ตรวจพนักงานที่มี username และ password ตรงกันในฐานข้อมูล
         const staff = await Staff.findOne({ username: username, password: password });
         
         if (staff) {
-            // ถ้าเจอ ให้ส่งข้อมูลชื่อและสิทธิ์กลับไป
+            // เจอให้ส่งข้อมูลชื่อและสิทกลับไป
             res.json({ message: 'เข้าสู่ระบบสำเร็จ', data: { name: staff.name, role: staff.role } });
         } else {
-            // ถ้าไม่เจอ แปลว่ารหัสผิด
+            // ถ้าไม่เจอแสดงว่ารหัสผิด
             res.status(401).json({ error: 'Username หรือ รหัสผ่านไม่ถูกต้อง!' });
         }
     } catch (error) {

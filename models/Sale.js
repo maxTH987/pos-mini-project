@@ -14,8 +14,7 @@ const saleSchema = new mongoose.Schema({
     subTotal: { type: Number, required: true }, 
     discount: { type: Number, default: 0 },     
     netTotal: { type: Number, required: true }, 
-    
-    // ข้อมูลการจ่ายเงิน (Payment)
+
     paymentMethod: { type: String, enum: ['cash', 'credit', 'promptpay'], required: true },
     amountPaid: { type: Number, required: true }, 
     change: { type: Number, default: 0 }          
