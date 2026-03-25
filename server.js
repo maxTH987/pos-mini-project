@@ -29,7 +29,10 @@ app.use('/api/reports', reportRoutes);
 
 if (process.env.MONGODB_URI) {
     mongoose.connect(process.env.MONGODB_URI)
-      .then(() => console.log('Connected to MongoDB Successfully!'))
+      .then(() => {
+          console.log('Connected to MongoDB Successfully!');
+          createDefaultAdmin();
+      })
       .catch((err) => console.error('MongoDB Connection Error:', err));
 }
 
@@ -68,8 +71,10 @@ app.get('/reports', (req, res) => {
 
 async function createDefaultAdmin() {
     try {
-        const staffCount = await Staff.countDocuments();
-        if (staffCount === 0) {
+        // ค้นหาว่ามี user 'admin' อยู่ในระบบแล้วหรือยัง
+        const adminUser = await Staff.findOne({ username: 'admin' });
+        
+        if (!adminUser) {
             const defaultAdmin = new Staff({
                 username: 'admin',
                 password: '1234',
@@ -77,13 +82,19 @@ async function createDefaultAdmin() {
                 role: 'owner'
             });
             await defaultAdmin.save();
+            console.log('สร้างบัญชี Admin เริ่มต้นสำเร็จ (admin / 1234)');
+        } else {
+            // ถ้าระบบมีบัญชี admin อยู่แล้ว แต่รหัสผ่านอาจจะไม่ใช่ 1234 ให้บังคับอัปเดตเป็น 1234
+            if (adminUser.password !== '1234') {
+                adminUser.password = '1234';
+                await adminUser.save();
+                console.log('พบัญชี admin อยู่แล้ว ทำการรีเซ็ตรหัสผ่านเป็น 1234 สำเร็จ');
+            }
         }
     } catch (err) {
-        console.error('ไม่สามารถสร้างบัญชี Admin ได้:', err);
+        console.error('ไม่สามารถสร้างหรืออัปเดตบัญชี Admin ได้:', err);
     }
 }
-createDefaultAdmin();
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);

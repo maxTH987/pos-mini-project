@@ -3,14 +3,14 @@
     "$oid": "69a04946e6c1f84add37d197"
   },
   "username": "admin",
-  "password": "password123",
+  "password": "1234",
   "name": "Kachen Konchai",
   "role": "owner",
   "createdAt": {
     "$date": "2026-02-26T13:23:18.815Z"
   },
   "updatedAt": {
-    "$date": "2026-02-26T13:23:18.815Z"
+    "$date": "2026-03-25T14:37:20.424Z"
   },
   "__v": 0
 },
