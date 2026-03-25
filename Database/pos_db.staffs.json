@@ -1,0 +1,32 @@
+[{
+  "_id": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "username": "admin",
+  "password": "password123",
+  "name": "Kachen Konchai",
+  "role": "owner",
+  "createdAt": {
+    "$date": "2026-02-26T13:23:18.815Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-26T13:23:18.815Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a07eb85af19d1d86b4cc18"
+  },
+  "username": "Pop",
+  "password": "123456",
+  "name": "Poppi Pop",
+  "role": "staff",
+  "createdAt": {
+    "$date": "2026-02-26T17:11:20.171Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-26T17:11:20.171Z"
+  },
+  "__v": 0
+}]

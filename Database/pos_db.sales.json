@@ -1,0 +1,392 @@
+[{
+  "_id": {
+    "$oid": "69a062795e21ae717b0af268"
+  },
+  "receiptNumber": "REC-0001",
+  "staffId": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "69a0483f7b7a7a4fbc6729e1"
+      },
+      "qty": 2,
+      "price": 10,
+      "_id": {
+        "$oid": "69a062795e21ae717b0af269"
+      }
+    }
+  ],
+  "subTotal": 20,
+  "discount": 5,
+  "netTotal": 15,
+  "paymentMethod": "cash",
+  "amountPaid": 20,
+  "change": 5,
+  "createdAt": {
+    "$date": "2026-02-26T15:10:49.934Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-26T15:10:49.934Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a07d35fa221b40bb502b4b"
+  },
+  "receiptNumber": "REC-1772125493817",
+  "staffId": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "69a0483f7b7a7a4fbc6729e1"
+      },
+      "qty": 3,
+      "price": 10,
+      "_id": {
+        "$oid": "69a07d35fa221b40bb502b4c"
+      }
+    }
+  ],
+  "subTotal": 30,
+  "discount": 0,
+  "netTotal": 30,
+  "paymentMethod": "cash",
+  "amountPaid": 100,
+  "change": 70,
+  "createdAt": {
+    "$date": "2026-02-26T17:04:53.888Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-26T17:04:53.888Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a0949547281313211c3af5"
+  },
+  "receiptNumber": "REC-1772131477023",
+  "staffId": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "69a0945947281313211c3af0"
+      },
+      "qty": 8,
+      "price": 25,
+      "_id": {
+        "$oid": "69a0949547281313211c3af6"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a08a9d7ad364426a7ef4c9"
+      },
+      "qty": 6,
+      "price": 20,
+      "_id": {
+        "$oid": "69a0949547281313211c3af7"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a08fa6294fbf66063096ac"
+      },
+      "qty": 7,
+      "price": 16,
+      "_id": {
+        "$oid": "69a0949547281313211c3af8"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a0483f7b7a7a4fbc6729e1"
+      },
+      "qty": 10,
+      "price": 10,
+      "_id": {
+        "$oid": "69a0949547281313211c3af9"
+      }
+    }
+  ],
+  "subTotal": 532,
+  "discount": 30,
+  "netTotal": 502,
+  "paymentMethod": "cash",
+  "amountPaid": 520,
+  "change": 18,
+  "createdAt": {
+    "$date": "2026-02-26T18:44:37.043Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-26T18:44:37.043Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a09782e94819ba27734d03"
+  },
+  "receiptNumber": "REC-1772132226083",
+  "staffId": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "69a0952f47281313211c3b0c"
+      },
+      "qty": 2,
+      "price": 20,
+      "_id": {
+        "$oid": "69a09782e94819ba27734d04"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a0945947281313211c3af0"
+      },
+      "qty": 2,
+      "price": 25,
+      "_id": {
+        "$oid": "69a09782e94819ba27734d05"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a0483f7b7a7a4fbc6729e1"
+      },
+      "qty": 1,
+      "price": 10,
+      "_id": {
+        "$oid": "69a09782e94819ba27734d06"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a08a9d7ad364426a7ef4c9"
+      },
+      "qty": 1,
+      "price": 20,
+      "_id": {
+        "$oid": "69a09782e94819ba27734d07"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a08fa6294fbf66063096ac"
+      },
+      "qty": 1,
+      "price": 16,
+      "_id": {
+        "$oid": "69a09782e94819ba27734d08"
+      }
+    }
+  ],
+  "subTotal": 136,
+  "discount": 0,
+  "netTotal": 136,
+  "paymentMethod": "cash",
+  "amountPaid": 140,
+  "change": 4,
+  "createdAt": {
+    "$date": "2026-02-26T18:57:06.107Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-26T18:57:06.107Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a1ac87099ee4d7990f5a01"
+  },
+  "receiptNumber": "REC-1772203143242",
+  "staffId": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "69a0483f7b7a7a4fbc6729e1"
+      },
+      "qty": 2,
+      "price": 10,
+      "_id": {
+        "$oid": "69a1ac87099ee4d7990f5a02"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a08fa6294fbf66063096ac"
+      },
+      "qty": 1,
+      "price": 16,
+      "_id": {
+        "$oid": "69a1ac87099ee4d7990f5a03"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a0945947281313211c3af0"
+      },
+      "qty": 2,
+      "price": 25,
+      "_id": {
+        "$oid": "69a1ac87099ee4d7990f5a04"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a0952f47281313211c3b0c"
+      },
+      "qty": 1,
+      "price": 20,
+      "_id": {
+        "$oid": "69a1ac87099ee4d7990f5a05"
+      }
+    }
+  ],
+  "subTotal": 106,
+  "discount": 0,
+  "netTotal": 106,
+  "paymentMethod": "cash",
+  "amountPaid": 120,
+  "change": 14,
+  "createdAt": {
+    "$date": "2026-02-27T14:39:03.248Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-27T14:39:03.248Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69ac3b18ecde40f8555c7dd1"
+  },
+  "receiptNumber": "REC-1772895000875",
+  "staffId": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "69a08fa6294fbf66063096ac"
+      },
+      "qty": 1,
+      "price": 16,
+      "_id": {
+        "$oid": "69ac3b18ecde40f8555c7dd2"
+      }
+    }
+  ],
+  "subTotal": 16,
+  "discount": 0,
+  "netTotal": 16,
+  "paymentMethod": "qr",
+  "amountPaid": 16,
+  "change": 0,
+  "createdAt": {
+    "$date": "2026-03-07T14:50:00.901Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-07T14:50:00.901Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69b6c92c70b25028bea125b2"
+  },
+  "receiptNumber": "REC-1773586732675",
+  "staffId": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "69a08fa6294fbf66063096ac"
+      },
+      "qty": 1,
+      "price": 16,
+      "_id": {
+        "$oid": "69b6c92c70b25028bea125b3"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a0483f7b7a7a4fbc6729e1"
+      },
+      "qty": 1,
+      "price": 10,
+      "_id": {
+        "$oid": "69b6c92c70b25028bea125b4"
+      }
+    },
+    {
+      "productId": {
+        "$oid": "69a0952f47281313211c3b0c"
+      },
+      "qty": 1,
+      "price": 20,
+      "_id": {
+        "$oid": "69b6c92c70b25028bea125b5"
+      }
+    }
+  ],
+  "subTotal": 46,
+  "discount": 0,
+  "netTotal": 46,
+  "paymentMethod": "cash",
+  "amountPaid": 50,
+  "change": 4,
+  "createdAt": {
+    "$date": "2026-03-15T14:58:52.689Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-15T14:58:52.689Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69b6cfce3dfdb19eab3c0f9f"
+  },
+  "receiptNumber": "REC-1773588430756",
+  "staffId": {
+    "$oid": "69a04946e6c1f84add37d197"
+  },
+  "items": [
+    {
+      "productId": {
+        "$oid": "69a08fa6294fbf66063096ac"
+      },
+      "qty": 2,
+      "price": 16,
+      "_id": {
+        "$oid": "69b6cfce3dfdb19eab3c0fa0"
+      }
+    }
+  ],
+  "subTotal": 32,
+  "discount": 0,
+  "netTotal": 32,
+  "paymentMethod": "cash",
+  "amountPaid": 40,
+  "change": 8,
+  "createdAt": {
+    "$date": "2026-03-15T15:27:10.777Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-15T15:27:10.777Z"
+  },
+  "__v": 0
+}]

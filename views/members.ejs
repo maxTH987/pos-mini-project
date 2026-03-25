@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>สมาชิก - POS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<%- include('navbar') %>
+
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="saas-heading">จัดการสมาชิก</h2>
+            <p class="saas-subheading mb-0">ดูแลข้อมูลสมาชิก คะแนนสะสม และระดับสมาชิก</p>
+        </div>
+        <div class="d-flex gap-4 text-end">
+            <div>
+                <div style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--saas-text-muted); font-weight: 700;">สมาชิกทั้งหมด</div>
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--saas-text-main);"><%= members ? members.length : 0 %></div>
+            </div>
+            <div>
+                <button class="saas-btn saas-btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#addMemberModal">
+                    <i class="fa-solid fa-user-plus"></i> สมัครสมาชิกใหม่
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="saas-surface overflow-hidden">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center" style="border-color: var(--border-subtle) !important;">
+            <div class="position-relative" style="width: 300px;">
+                <i class="fa-solid fa-search position-absolute" style="top: 50%; left: 1rem; transform: translateY(-50%); color: var(--saas-text-muted);"></i>
+                <input type="text" id="searchInput" class="saas-input" style="padding-left: 2.5rem; padding-top: 0.5rem; padding-bottom: 0.5rem;" placeholder="ค้นหาเบอร์โทร / ชื่อ...">
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="saas-table w-100 mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;"></th>
+                        <th>ข้อมูลสมาชิก</th>
+                        <th>เบอร์โทรศัพท์ (รหัส)</th>
+                        <th>คะแนนสะสม (Points)</th>
+                        <th>ส่วนลดที่ได้รับ</th>
+                        <th class="text-end">การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody id="memberTableBody">
+                    <% if(members && members.length > 0) { %>
+                        <% members.forEach(function(member, index) { %>
+                            <tr>
+                                <td class="text-center">
+                                    <div style="width: 36px; height: 36px; border-radius: 50%; background-color: var(--saas-primary-light); color: var(--saas-primary); display: flex; align-items: center; justify-content: center; font-weight: 700;">
+                                        <%= member.name.charAt(0).toUpperCase() %>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="font-weight: 600; color: var(--saas-text-main);"><%= member.name %></div>
+                                    <div style="font-size: 0.8rem; color: var(--saas-text-muted);">สมัครเมื่อ: <%= new Date(member.createdAt).toLocaleDateString('th-TH') %></div>
+                                </td>
+                                <td>
+                                    <span style="font-family: monospace; padding: 0.2rem 0.5rem; background-color: var(--saas-bg); border-radius: var(--radius-sm); color: var(--saas-text-muted);"><%= member.phone %></span>
+                                </td>
+                                <td>
+                                    <span style="font-weight: 700; color: var(--saas-primary); font-size: 1.1rem;"><%= member.points %></span> pts
+                                </td>
+                                <td>
+                                    <% 
+                                        let discountText = '0%';
+                                        let badgeColor = 'saas-badge-neutral';
+                                        
+                                        if (member.points >= 500) { discountText = '10%'; badgeColor = 'saas-badge-success'; }
+                                        else if (member.points >= 100) { discountText = '5%'; badgeColor = 'saas-badge-primary'; }
+                                        else if (member.points >= 50) { discountText = '2%'; badgeColor = 'saas-badge-warning'; }
+                                    %>
+                                    <span class="saas-badge <%= badgeColor %>"><%= discountText %></span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="saas-btn saas-btn-ghost" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;"
+                                            data-id="<%= member._id %>"
+                                            data-name="<%= member.name %>"
+                                            data-phone="<%= member.phone %>"
+                                            data-points="<%= member.points %>"
+                                            onclick="triggerEdit(this)">แก้ไขข้อมูล</button>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr><td colspan="6" class="text-center py-5" style="color: var(--saas-text-muted);">ไม่พบข้อมูลสมาชิก</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<div class="modal fade" id="addMemberModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content saas-surface border-0 p-2">
+            <div class="modal-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0" style="font-weight: 800; letter-spacing: -0.02em;">สมัครสมาชิกใหม่</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addMemberForm" onsubmit="addMember(event)">
+                    <div class="mb-3">
+                        <label class="saas-label">เบอร์โทรศัพท์ (ใช้เป็นรหัสสมาชิก)</label>
+                        <input type="text" id="phone" class="saas-input" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="saas-label">ชื่อ - นามสกุล</label>
+                        <input type="text" id="name" class="saas-input" required>
+                    </div>
+                    <div class="d-flex gap-3 justify-content-end">
+                        <button type="button" class="saas-btn saas-btn-ghost" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="saas-btn saas-btn-primary">บันทึกข้อมูลสมาชิก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editMemberModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content saas-surface border-0 p-2">
+            <div class="modal-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0" style="font-weight: 800; letter-spacing: -0.02em;">แก้ไขข้อมูลสมาชิก</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editMemberForm">
+                    <input type="hidden" id="edit-id">
+                    <div class="mb-3">
+                        <label class="saas-label">เบอร์โทรศัพท์ (รหัส)</label>
+                        <input type="text" id="edit-phone" class="saas-input" readonly style="background-color: var(--saas-bg);">
+                        <div class="mt-1" style="font-size: 0.75rem; color: var(--saas-text-muted);">ไม่สามารถเปลี่ยนเบอร์โทรได้</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="saas-label">ชื่อ - นามสกุล</label>
+                        <input type="text" id="edit-name" class="saas-input" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="saas-label">คะแนนสะสม (ปรับแก้ได้)</label>
+                        <input type="number" id="edit-points" class="saas-input" required min="0">
+                    </div>
+                    <div class="d-flex gap-3 justify-content-end">
+                        <button type="button" class="saas-btn saas-btn-ghost" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="button" class="saas-btn saas-btn-primary" onclick="submitEdit()">บันทึกการเปลี่ยนแปลง</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let editModalObj;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        editModalObj = new bootstrap.Modal(document.getElementById('editMemberModal'));
+
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            const term = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#memberTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                if(text.includes(term)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    async function addMember(e) {
+        e.preventDefault();
+        const phone = document.getElementById('phone').value;
+        const name = document.getElementById('name').value;
+
+        try {
+            const res = await fetch('/api/members', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone, name })
+            });
+
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ข้อผิดพลาด',
+                    text: 'เบอร์โทรศัพท์นี้ถูกใช้งานแล้ว',
+                    confirmButtonColor: 'var(--saas-primary)'
+                });
+            }
+        } catch (error) {
+            Swal.fire('ผิดพลาด', 'ติดต่อเซิร์ฟเวอร์ไม่ได้', 'error');
+        }
+    }
+
+    function triggerEdit(btn) {
+        const d = btn.dataset;
+        document.getElementById('edit-id').value = d.id;
+        document.getElementById('edit-phone').value = d.phone;
+        document.getElementById('edit-name').value = d.name;
+        document.getElementById('edit-points').value = d.points;
+        editModalObj.show();
+    }
+
+    async function submitEdit() {
+        const id = document.getElementById('edit-id').value;
+        const name = document.getElementById('edit-name').value;
+        const points = document.getElementById('edit-points').value;
+
+        try {
+            const res = await fetch(`/api/members/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, points })
+            });
+
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                Swal.fire({ icon: 'error', title: 'ผิดพลาด', confirmButtonColor: 'var(--saas-primary)' });
+            }
+        } catch (error) {
+            Swal.fire('ผิดพลาด', 'ติดต่อเซิร์ฟเวอร์ไม่ได้', 'error');
+        }
+    }
+</script>
+</body>
+</html>

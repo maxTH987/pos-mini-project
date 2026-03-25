@@ -1,0 +1,100 @@
+[{
+  "_id": {
+    "$oid": "69a0483f7b7a7a4fbc6729e1"
+  },
+  "barcode": "8850000000001",
+  "name": "น้ำดื่ม ตราสิงห์ 600ml",
+  "description": "น้ำดื่มสะอาด",
+  "cost": 5,
+  "price": 10,
+  "stock": 81,
+  "category": "Beverage",
+  "createdAt": {
+    "$date": "2026-02-26T13:18:55.300Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-15T14:58:52.712Z"
+  },
+  "__v": 0,
+  "imageUrl": "https://d19oj5aeuefgv.cloudfront.net/0023008"
+},
+{
+  "_id": {
+    "$oid": "69a08a9d7ad364426a7ef4c9"
+  },
+  "barcode": "8850000000002",
+  "name": "โออิชิ",
+  "description": "",
+  "cost": 15,
+  "price": 20,
+  "stock": 0,
+  "category": "Beverage",
+  "imageUrl": "/uploads/1772129677919-pngegg.png",
+  "createdAt": {
+    "$date": "2026-02-26T18:02:05.455Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-27T13:42:36.906Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a08fa6294fbf66063096ac"
+  },
+  "barcode": "8850000000003",
+  "name": "C-vitt Vitamin Lemon 140ml",
+  "description": "",
+  "cost": 14,
+  "price": 16,
+  "stock": 87,
+  "category": "Beverage",
+  "imageUrl": "/uploads/1772130214460-663df8b5642e2_74909-1-l__960x960xsquare-removebg-preview.png",
+  "createdAt": {
+    "$date": "2026-02-26T18:23:34.590Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-15T15:27:10.781Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a0945947281313211c3af0"
+  },
+  "barcode": "8850000000004",
+  "name": "Cocomax (โคโค่แม็ก) น้ำมะพร้าวแท้ 100%",
+  "description": "",
+  "cost": 20,
+  "price": 25,
+  "stock": 88,
+  "category": "Beverage",
+  "imageUrl": "https://www.cocomax.com/images/demo2023/productscocomax/2025-04-29_162819.png",
+  "createdAt": {
+    "$date": "2026-02-26T18:43:37.319Z"
+  },
+  "updatedAt": {
+    "$date": "2026-02-27T14:39:03.259Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69a0952f47281313211c3b0c"
+  },
+  "barcode": "8850000000005",
+  "name": "เป๊ปซี่ 550มล.",
+  "description": "",
+  "cost": 15,
+  "price": 20,
+  "stock": 2,
+  "category": "Beverage",
+  "imageUrl": "https://www.bar24store.com/contents/products/sizes/45.png",
+  "createdAt": {
+    "$date": "2026-02-26T18:47:11.841Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-15T14:58:52.713Z"
+  },
+  "__v": 0
+}]

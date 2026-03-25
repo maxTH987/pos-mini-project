@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>เข้าสู่ระบบ - POS SaaS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/modern-saas.css">
+
+    <style>
+        body {
+            background-color: var(--saas-bg);
+            background-image: 
+                radial-gradient(circle at 15% 50%, oklch(92% 0.05 var(--hue-primary)), transparent 25%),
+                radial-gradient(circle at 85% 30%, oklch(90% 0.06 var(--hue-primary)), transparent 25%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .login-card {
+            background-color: var(--saas-surface);
+            width: 100%;
+            max-width: 440px;
+            padding: var(--space-6);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .login-brand {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--saas-primary);
+            text-align: center;
+            margin-bottom: var(--space-2);
+            letter-spacing: -0.05em;
+        }
+
+        .login-subtitle {
+            text-align: center;
+            color: var(--saas-text-muted);
+            margin-bottom: var(--space-6);
+            font-weight: 500;
+        }
+
+        .login-input-wrapper {
+            position: relative;
+            margin-bottom: var(--space-4);
+        }
+
+        .login-input-wrapper i {
+            position: absolute;
+            top: 50%;
+            left: 1.25rem;
+            transform: translateY(-50%);
+            color: var(--saas-text-muted);
+            font-size: 1.1rem;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 0.85rem 1.25rem 0.85rem 3.25rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-subtle);
+            background-color: var(--saas-bg);
+            color: var(--saas-text-main);
+            font-family: var(--font-sans);
+            font-weight: 500;
+            transition: all var(--transition-fast);
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--saas-primary);
+            box-shadow: 0 0 0 4px var(--saas-primary-light);
+            background-color: var(--saas-surface);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 1rem;
+            background-color: var(--saas-primary);
+            color: var(--saas-text-inverse);
+            border: none;
+            transition: all var(--transition-fast);
+            box-shadow: 0 4px 12px oklch(45% 0.15 var(--hue-primary) / 0.3);
+            margin-top: var(--space-3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            background-color: var(--saas-primary-hover);
+            box-shadow: 0 8px 16px oklch(45% 0.15 var(--hue-primary) / 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="login-brand">
+             POS System
+        </div>
+        <p class="login-subtitle">ลงชื่อเข้าสู่ระบบจัดการร้านค้า</p>
+        
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="login-input-wrapper">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="username" class="login-input" placeholder="ชื่อบัญชีผู้ใช้ (Username)" required>
+            </div>
+            
+            <div class="login-input-wrapper">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="password" class="login-input" placeholder="รหัสผ่าน (Password)" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="login-btn">
+                เข้าสู่ระบบ <i class="fa-solid fa-arrow-right ms-2"></i>
+            </button>
+            
+            <div class="text-center mt-4" style="font-size: 0.85rem; color: var(--saas-text-muted);">
+                หรือเข้าสู่ระบบในฐานะ <a href="#" style="color: var(--saas-primary); text-decoration: none; font-weight: 600;" onclick="autoFillDev()">Admin(Dev)</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal fade" id="errorModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content saas-surface border-0 p-3 text-center">
+                <div class="modal-body">
+                    <div style="font-size: 3rem; color: var(--saas-danger); margin-bottom: 1rem;"><i class="fa-solid fa-circle-exclamation"></i></div>
+                    <h5 style="font-weight: 700;">เข้าสู่ระบบไม่สำเร็จ</h5>
+                    <p style="color: var(--saas-text-muted); font-size: 0.9rem;" id="errorText">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</p>
+                    <button type="button" class="saas-btn saas-btn-danger w-100 mt-2" data-bs-dismiss="modal">ตกลง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let errorModal;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+
+            if (localStorage.getItem('pos_role')) {
+                window.location.href = '/';
+            }
+        });
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const res = await fetch('/api/staff/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (res.ok) {
+                    const resData = await res.json();
+                    localStorage.setItem('pos_role', resData.data.role);
+                    localStorage.setItem('pos_name', resData.data.name);
+                    
+                    window.location.href = '/';
+                } else {
+                    const errData = await res.json();
+                    document.getElementById('errorText').innerText = errData.error || 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';
+                    errorModal.show();
+                }
+            } catch (err) {
+                document.getElementById('errorText').innerText = 'ไม่สามารถติดต่อเซิร์ฟเวอร์ได้';
+                errorModal.show();
+            }
+        }
+
+        function autoFillDev() {
+            document.getElementById('username').value = 'admin';
+            document.getElementById('password').value = '1234';
+
+            document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>รายงานยอดขาย - POS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<%- include('navbar') %>
+
+    <div class="d-flex justify-content-between align-items-end mb-5">
+        <div>
+            <h2 class="saas-heading">รายงานยอดขาย</h2>
+            <p class="saas-subheading mb-0">สรุปข้อมูลการขาย สินค้าขายดี และรายละเอียดบิล</p>
+        </div>
+        
+        <form class="saas-surface p-3 d-flex align-items-end gap-3" style="border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);" id="dateFilterForm" onsubmit="event.preventDefault(); fetchReport();">
+            <div>
+                <label class="saas-label" style="font-size: 0.75rem;">เริ่มต้น</label>
+                <input type="date" id="startDate" class="saas-input" style="padding: 0.5rem 0.75rem;">
+            </div>
+            <div>
+                <label class="saas-label" style="font-size: 0.75rem;">สิ้นสุด</label>
+                <input type="date" id="endDate" class="saas-input" style="padding: 0.5rem 0.75rem;">
+            </div>
+            <button type="submit" class="saas-btn saas-btn-primary" style="padding: 0.5rem 1.25rem;">ตกลง</button>
+        </form>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="saas-surface p-4 text-center">
+                <div style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: var(--saas-text-muted); margin-bottom: 0.5rem;">ยอดขายรวม</div>
+                <div style="font-size: 2rem; font-weight: 800; color: var(--saas-text-main);" id="totalSales">0 ฿</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="saas-surface p-4 text-center">
+                <div style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: var(--saas-text-muted); margin-bottom: 0.5rem;">ต้นทุนรวม</div>
+                <div style="font-size: 2rem; font-weight: 800; color: var(--saas-warning);" id="totalCost">0 ฿</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="saas-surface p-4 text-center">
+                <div style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: var(--saas-text-muted); margin-bottom: 0.5rem;">กำไรสุทธิ</div>
+                <div style="font-size: 2rem; font-weight: 800; color: var(--saas-primary);" id="totalProfit">0 ฿</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="saas-surface p-4 text-center">
+                <div style="font-size: 0.8rem; text-transform: uppercase; font-weight: 700; color: var(--saas-text-muted); margin-bottom: 0.5rem;">จำนวนบิล</div>
+                <div style="font-size: 2rem; font-weight: 800; color: var(--saas-text-main);" id="totalBills">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-5">
+        <div class="col-xl-4 col-lg-5">
+            <div class="saas-surface h-100 overflow-hidden">
+                <div class="p-4 border-bottom" style="border-color: var(--border-subtle) !important;">
+                    <h5 class="mb-0" style="font-weight: 700;">สินค้าขายดี</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="saas-table w-100 mb-0">
+                        <thead>
+                            <tr>
+                                <th>สินค้า</th>
+                                <th class="text-end">จำนวน</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topSellingBody">
+                            <tr><td colspan="2" class="text-center py-4" style="color: var(--saas-text-muted);">กำลังโหลดข้อมูล...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-8 col-lg-7">
+            <div class="saas-surface overflow-hidden">
+                <div class="p-4 border-bottom" style="border-color: var(--border-subtle) !important;">
+                    <h5 class="mb-0" style="font-weight: 700;">ประวัติการขาย</h5>
+                </div>
+                <div class="table-responsive">
+                    <table class="saas-table w-100 mb-0">
+                        <thead>
+                            <tr>
+                                <th>เวลา</th>
+                                <th>ยอดขาย</th>
+                                <th>กำไร</th>
+                                <th>วิธีชำระ</th>
+                                <th>รายละเอียดสินค้า</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesTableBody">
+                            <tr><td colspan="5" class="text-center py-5" style="color: var(--saas-text-muted);">ไม่มีข้อมูลการขายในช่วงเวลานี้</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').value = today;
+        document.getElementById('endDate').value = today;
+        fetchReport();
+    });
+
+    async function fetchReport() {
+        const start = document.getElementById('startDate').value;
+        const end = document.getElementById('endDate').value;
+        try {
+            const res = await fetch(`/api/reports/sales?startDate=${start}&endDate=${end}`);
+            if(res.ok) {
+                const data = await res.json();
+                
+                // Show Metrics
+                document.getElementById('totalBills').innerText = data.summary.totalBills.toLocaleString();
+                document.getElementById('totalSales').innerText = data.summary.totalSales.toLocaleString() + ' ฿';
+                document.getElementById('totalCost').innerText = data.summary.totalCost.toLocaleString() + ' ฿';
+                document.getElementById('totalProfit').innerText = data.summary.totalProfit.toLocaleString() + ' ฿';
+
+                // Top Products
+                const topBody = document.getElementById('topSellingBody');
+                topBody.innerHTML = '';
+                
+                if (data.topProducts.length === 0) {
+                    topBody.innerHTML = `<tr><td colspan="2" class="text-center py-4" style="color: var(--saas-text-muted);">ไม่มีข้อมูล</td></tr>`;
+                } else {
+                    data.topProducts.slice(0, 5).forEach((product, index) => {
+                        let rankClass = index === 0 ? 'color: var(--saas-warning); font-size: 1.2rem;' : (index === 1 ? 'color: var(--saas-text-muted); font-size: 1.1rem;' : 'color: #cd7f32; font-size: 1rem;');
+                        let medal = index === 0 ? '1.' : (index === 1 ? '2.' : '3.');
+                        let medalHtml = index < 3 ? `<span style="${rankClass}">${medal}</span>` : `<span style="color: var(--saas-text-muted); padding: 0 4px;">${index+1}</span>`;
+                        
+                        topBody.innerHTML += `
+                            <tr>
+                                <td style="font-weight: 600;">${medalHtml} ${product.name}</td>
+                                <td class="text-end fw-bold" style="color: var(--saas-primary);">${product.qty}</td>
+                            </tr>
+                        `;
+                    });
+                }
+
+                // Sales Table
+                const tbody = document.getElementById('salesTableBody');
+                tbody.innerHTML = '';
+
+                if(data.details.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5" style="color: var(--saas-text-muted);">ไม่มีข้อมูลการขายในช่วงเวลานี้</td></tr>`;
+                    return;
+                }
+
+                data.details.forEach(sale => {
+                    const dateObj = new Date(sale.createdAt);
+                    const dateStr = `${dateObj.toLocaleDateString('th-TH')} <br><span style="font-size: 0.8rem; color: var(--saas-text-muted);">${dateObj.toLocaleTimeString('th-TH')}</span>`;
+
+                    let itemsHtml = sale.items.map(item => {
+                        let productName = item.productId ? item.productId.name : 'สินค้าถูกลบ';
+                        return `<div style="font-size: 0.85rem;"><span style="font-weight: 600; color: var(--saas-text-main);">${productName}</span> (${item.qty}x)</div>`;
+                    }).join('');
+
+                    let paymentBadge = sale.paymentMethod === 'qr' 
+                        ? `<span class="saas-badge saas-badge-primary">สแกนจ่าย(QR)</span>`
+                        : `<span class="saas-badge saas-badge-success">เงินสด</span>`;
+
+                    let cost = 0;
+                    sale.items.forEach(item => { if(item.productId) cost += (item.productId.cost * item.qty); });
+                    let profit = sale.netTotal - cost;
+
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="font-size: 0.85rem; font-weight: 500;">${dateStr}<br><span style="font-size: 0.75rem; color: var(--saas-text-muted);">${sale.receiptNumber}</span></td>
+                            <td style="font-weight: 600;">${sale.netTotal.toLocaleString()} ฿</td>
+                            <td style="color: var(--saas-success); font-weight: 600;">${profit.toLocaleString()} ฿</td>
+                            <td>${paymentBadge}</td> 
+                            <td>${itemsHtml}</td>
+                        </tr>
+                    `;
+                });
+
+            } else {
+                const errData = await res.json();
+                alert(errData.message || 'เกิดข้อผิดพลาดในการดึงรายงาน');
+            }
+        } catch(error) {
+            console.error(error);
+            alert('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้');
+        }
+    }
+</script>
+</body>
+</html>

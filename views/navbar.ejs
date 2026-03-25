@@ -1,0 +1,109 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="/css/modern-saas.css">
+
+<div class="saas-app-wrapper">
+
+    <aside class="saas-sidebar">
+        <div class="saas-brand">
+            POS System
+        </div>
+        
+        <nav class="saas-nav mt-4">
+            <a class="saas-nav-link" href="/" id="nav-pos">
+                <i class="fa-solid fa-cash-register"></i> ระบบขาย
+            </a>
+            <a class="saas-nav-link" href="/products" id="nav-products">
+                <i class="fa-solid fa-box"></i> คลังสินค้า
+            </a>
+            <a class="saas-nav-link" href="/members" id="nav-members">
+                <i class="fa-solid fa-users"></i> สมาชิก
+            </a>
+            
+            <div class="mt-4 mb-2 px-3 text-uppercase text-muted" style="font-size: 0.7rem; font-weight: 700; letter-spacing: 0.05em;" id="admin-header">การจัดการ (ผู้ดูแล)</div>
+            
+            <a class="saas-nav-link admin-only d-none" href="/reports" id="nav-reports">
+                <i class="fa-solid fa-chart-pie"></i> รายงานยอดขาย
+            </a>
+            <a class="saas-nav-link admin-only d-none" href="/staff" id="nav-staff">
+                <i class="fa-solid fa-user-shield"></i> จัดการพนักงาน
+            </a>
+        </nav>
+
+        <div class="saas-user-profile">
+            <div id="userProfileInfo">
+                <div class="fw-bold" id="userNameDisplay">Loading...</div>
+                <div id="userRoleBadgeContainer" class="mt-1"></div>
+            </div>
+            <button class="saas-btn saas-btn-ghost w-100 justify-content-start text-danger mt-2" style="padding: 0.5rem 0;" onclick="logout()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> ออกจากระบบ
+            </button>
+        </div>
+    </aside>
+
+    <main class="saas-main-content">
+
+<script>
+    const currentRole = localStorage.getItem('pos_role');
+    const currentName = localStorage.getItem('pos_name');
+    
+    if (!currentRole || !currentName) {
+        window.location.href = '/login';
+    } else {
+        applyRole(currentRole, currentName);
+        highlightCurrentNav();
+    }
+
+    function highlightCurrentNav() {
+
+        const path = window.location.pathname;
+        let id = 'nav-pos';
+        if(path.includes('/products')) id = 'nav-products';
+        if(path.includes('/members')) id = 'nav-members';
+        if(path.includes('/reports')) id = 'nav-reports';
+        if(path.includes('/staff')) id = 'nav-staff';
+        
+        const el = document.getElementById(id);
+        if(el) el.classList.add('active');
+    }
+
+    function logout() {
+        Swal.fire({
+            title: 'ออกจากระบบ?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'ใช่, ออกจากระบบ',
+            cancelButtonText: 'ยกเลิก',
+            confirmButtonColor: 'var(--saas-primary)',
+            cancelButtonColor: 'var(--saas-text-muted)'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.clear(); 
+                window.location.href = '/login'; 
+            }
+        });
+    }
+
+    function applyRole(role, name) {
+        document.getElementById('userNameDisplay').innerText = name;
+        
+        const badgeClass = role === 'owner' ? 'saas-badge-primary' : 'saas-badge-neutral';
+        const roleText = role === 'owner' ? 'Owner / Manager' : 'Staff';
+        document.getElementById('userRoleBadgeContainer').innerHTML = `<span class="saas-badge ${badgeClass}">${roleText}</span>`;
+        
+        if(role !== 'owner') {
+            document.getElementById('admin-header').style.display = 'none';
+        }
+
+        document.querySelectorAll('.admin-only').forEach(el => {
+            if (role === 'owner') {
+                el.classList.remove('d-none'); 
+            } else {
+                el.classList.add('d-none');    
+            }
+        });
+
+        if(role === 'staff' && (window.location.pathname === '/staff' || window.location.pathname === '/reports')) {
+            window.location.href = '/';
+        }
+    }
+</script>
