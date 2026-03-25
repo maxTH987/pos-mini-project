@@ -83,13 +83,6 @@ async function createDefaultAdmin() {
             });
             await defaultAdmin.save();
             console.log('สร้างบัญชี Admin เริ่มต้นสำเร็จ (admin / 1234)');
-        } else {
-            // ถ้าระบบมีบัญชี admin อยู่แล้ว แต่รหัสผ่านอาจจะไม่ใช่ 1234 ให้บังคับอัปเดตเป็น 1234 
-            if (adminUser.password !== '1234') {
-                adminUser.password = '1234';
-                await adminUser.save();
-                console.log('พบัญชี admin อยู่แล้ว ทำการรีเซ็ตรหัสผ่านเป็น 1234 สำเร็จ');
-            }
         }
     } catch (err) {
         console.error('ไม่สามารถสร้างหรืออัปเดตบัญชี Admin ได้:', err);
