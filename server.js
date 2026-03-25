@@ -84,7 +84,7 @@ async function createDefaultAdmin() {
             await defaultAdmin.save();
             console.log('สร้างบัญชี Admin เริ่มต้นสำเร็จ (admin / 1234)');
         } else {
-            // ถ้าระบบมีบัญชี admin อยู่แล้ว แต่รหัสผ่านอาจจะไม่ใช่ 1234 ให้บังคับอัปเดตเป็น 1234
+            // ถ้าระบบมีบัญชี admin อยู่แล้ว แต่รหัสผ่านอาจจะไม่ใช่ 1234 ให้บังคับอัปเดตเป็น 1234 
             if (adminUser.password !== '1234') {
                 adminUser.password = '1234';
                 await adminUser.save();
