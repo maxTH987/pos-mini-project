@@ -26,6 +26,8 @@ const saleRoutes = require('./routes/saleRoutes');
 app.use('/api/sales', saleRoutes);
 const reportRoutes = require('./routes/reportRoutes');
 app.use('/api/reports', reportRoutes);
+const settingRoutes = require('./routes/settingRoutes');
+app.use('/api/settings', settingRoutes);
 
 if (process.env.MONGODB_URI) {
     mongoose.connect(process.env.MONGODB_URI)
@@ -67,6 +69,11 @@ app.get('/products', async (req, res) => {
 // 5. หน้ารายงาน
 app.get('/reports', (req, res) => {
     res.render('reports'); 
+});
+
+// 6. หน้าตั้งค่าระบบ
+app.get('/settings', (req, res) => {
+    res.render('settings'); 
 });
 
 async function createDefaultAdmin() {
