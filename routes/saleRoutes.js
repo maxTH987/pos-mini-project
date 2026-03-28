@@ -22,15 +22,16 @@ router.post('/', async (req, res) => {
         // 3. ระบบสะสมแต้ม
         let earnedPoints = 0;
         let memberName = "";
+        let usedPoints = saleData.usedPoints || 0;
         
         if (saleData.memberPhone) {
-            // ซื้อทุกๆ 10 บาท ได้ 1 แต้ม
+            // ซื้อทุกๆ 10 บาท ได้ 1 แต้ม (คิดจากยอดสุทธิ)
             earnedPoints = Math.floor(saleData.netTotal / 10); 
 
-            // ค้นหาสมาชิกด้วยเบอร์โทร แล้วบวกแต้มเข้าไป
+            // ค้นหาสมาชิกด้วยเบอร์โทร แล้วบวกแต้มที่ได้ หักแต้มที่ใช้
             const member = await Member.findOneAndUpdate(
                 { phone: saleData.memberPhone },
-                { $inc: { points: earnedPoints } },
+                { $inc: { points: earnedPoints - usedPoints } },
                 { new: true }
             );
 
