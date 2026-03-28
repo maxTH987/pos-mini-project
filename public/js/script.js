@@ -237,7 +237,7 @@ async function checkout() {
             title: 'สแกน QR Code เพื่อชำระเงิน',
             html: `
                 <h4 class="text-primary mb-3">ยอดชำระ: <b>${netTotal.toLocaleString(undefined, { maximumFractionDigits: 2 })} บาท</b></h4>
-                <img src="https://cdn.discordapp.com/attachments/1232314598535729266/1479852175612969171/Screenshot_20260307_214315_Gallery.jpg?ex=69ad8b3c&is=69ac39bc&hm=aae9e4cdaf5602bdf8d8ac1f1adc129bcc3a0eadee5aba3eebb6d223f83cba8f&" alt="PromptPay QR" style="width: 220px; border: 2px solid #1e88e5; border-radius: 15px; padding: 10px;">
+                <img src="https://cdn.discordapp.com/attachments/1232314598535729266/1479852175612969171/Screenshot_20260307_214315_Gallery.jpg?ex=69c93abc&is=69c7e93c&hm=c61c15298c61f945a966e4eaacc78ec39f738a06e9a0b08032f8cc2f930772f8&${netTotal}" alt="PromptPay QR" style="width: 220px; border: 2px solid #1e88e5; border-radius: 15px; padding: 10px;">
                 <p class="text-muted mt-3 mb-0 fs-6">กรุณารอให้ลูกค้าโอนเงินให้สำเร็จ<br>ก่อนกดปุ่มยืนยันด้านล่าง</p>
             `,
             showCancelButton: true,
