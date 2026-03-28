@@ -41,7 +41,7 @@
     </div>
 
     <div class="row g-5">
-        <div class="col-xl-4 col-lg-5">
+        <div class="col-xl-5 col-lg-5">
             <div class="saas-surface p-4">
                 <h5 class="mb-4" style="font-weight: 700; letter-spacing: -0.02em;">เพิ่มสินค้าใหม่</h5>
                 <form onsubmit="addProduct(event)">
@@ -54,13 +54,17 @@
                         <input type="text" id="name" class="saas-input" required>
                     </div>
                     <div class="row g-3 mb-3">
-                        <div class="col-6">
-                            <label class="saas-label">ต้นทุน (฿)</label>
+                        <div class="col-4">
+                            <label class="saas-label text-nowrap">ต้นทุน (฿)</label>
                             <input type="number" id="cost" class="saas-input" required min="0">
                         </div>
-                        <div class="col-6">
-                            <label class="saas-label">ราคาขาย (฿)</label>
+                        <div class="col-4">
+                            <label class="saas-label text-nowrap">ราคาปกติ (฿)</label>
                             <input type="number" id="price" class="saas-input" required min="0">
+                        </div>
+                        <div class="col-4">
+                            <label class="saas-label text-nowrap">ราคาสมาชิก (฿)</label>
+                            <input type="number" id="memberPrice" class="saas-input" placeholder="ไม่มี" min="0">
                         </div>
                     </div>
                     <div class="row g-3 mb-3">
@@ -78,7 +82,7 @@
                         <label class="saas-label">รูปภาพ</label>
                         <input type="url" id="imageUrl" class="saas-input" placeholder="ลิงก์ URL รูปภาพ">
                         <div class="text-center my-2" style="font-size: 0.75rem; color: var(--saas-text-muted); font-weight: 600;">หรืออัปโหลด</div>
-                        <input type="file" id="imageFile" class="saas-input pt-2" accept="image/*">
+                        <input type="file" id="imageFile" class="form-control" accept="image/*" style="border-radius: var(--radius-md); border-color: var(--border-subtle);">
                     </div>
 
                     <button type="submit" class="saas-btn saas-btn-primary w-100" style="padding: 1rem;">บันทึกรายการสินค้า</button>
@@ -86,14 +90,14 @@
             </div>
         </div>
 
-        <div class="col-xl-8 col-lg-7">
+        <div class="col-xl-7 col-lg-7">
             <div class="saas-surface" style="overflow: hidden;">
                 <div class="table-responsive">
                     <table class="saas-table w-100">
                         <thead>
                             <tr>
                                 <th>สินค้า (<%= totalItems %>)</th>
-                                <th>ราคาขาย</th>
+                                <th>ราคา</th>
                                 <th>สต๊อก</th>
                                 <th class="text-end">จัดการ</th>
                             </tr>
@@ -120,6 +124,9 @@
                                     <td>
                                         <div class="d-flex flex-column">
                                             <span style="font-weight: 700; color: var(--saas-text-main);"><%= p.price %> ฿</span>
+                                            <% if (p.memberPrice) { %>
+                                                <span style="font-size: 0.8rem; color: var(--saas-primary); font-weight: 600;">สมาชิก: <%= p.memberPrice %> ฿</span>
+                                            <% } %>
                                             <span style="font-size: 0.75rem; color: var(--saas-text-muted);">ทุน: <%= p.cost %> ฿</span>
                                         </div>
                                     </td>
@@ -139,6 +146,7 @@
                                                 data-name="<%= p.name %>"
                                                 data-cost="<%= p.cost %>"
                                                 data-price="<%= p.price %>"
+                                                data-memberprice="<%= p.memberPrice || '' %>"
                                                 data-stock="<%= p.stock %>"
                                                 data-img="<%= p.imageUrl || '' %>"
                                                 onclick="triggerEdit(this)">แก้ไข</button>
@@ -155,7 +163,7 @@
     </div>
 
 <div class="modal fade" id="editProductModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 600px;">
         <div class="modal-content saas-surface border-0 p-2">
             <div class="modal-body p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -169,13 +177,17 @@
                         <input type="text" id="edit-name" class="saas-input" required>
                     </div>
                     <div class="row g-3 mb-3">
-                        <div class="col-6">
-                            <label class="saas-label">ต้นทุน (฿)</label>
+                        <div class="col-4">
+                            <label class="saas-label text-nowrap">ต้นทุน (฿)</label>
                             <input type="number" id="edit-cost" class="saas-input" required min="0">
                         </div>
-                        <div class="col-6">
-                            <label class="saas-label">ราคาขาย (฿)</label>
+                        <div class="col-4">
+                            <label class="saas-label text-nowrap">ราคาปกติ (฿)</label>
                             <input type="number" id="edit-price" class="saas-input" required min="0">
+                        </div>
+                        <div class="col-4">
+                            <label class="saas-label text-nowrap">ราคาสมาชิก (฿)</label>
+                            <input type="number" id="edit-memberPrice" class="saas-input" placeholder="ไม่มี" min="0">
                         </div>
                     </div>
                     <div class="mb-3">
@@ -215,6 +227,7 @@
         formData.append('name', document.getElementById('name').value);
         formData.append('cost', document.getElementById('cost').value);
         formData.append('price', document.getElementById('price').value);
+        if(document.getElementById('memberPrice').value) formData.append('memberPrice', document.getElementById('memberPrice').value);
         formData.append('stock', document.getElementById('stock').value);
         formData.append('category', document.getElementById('category').value);
         formData.append('imageUrl', document.getElementById('imageUrl').value);
@@ -241,6 +254,7 @@
         document.getElementById('edit-name').value = p.name;
         document.getElementById('edit-cost').value = p.cost;
         document.getElementById('edit-price').value = p.price;
+        document.getElementById('edit-memberPrice').value = p.memberprice || '';
         document.getElementById('edit-stock').value = p.stock;
         document.getElementById('edit-imageUrl').value = p.img;
         editModalInstance.show();
@@ -252,6 +266,7 @@
         formData.append('name', document.getElementById('edit-name').value);
         formData.append('cost', document.getElementById('edit-cost').value);
         formData.append('price', document.getElementById('edit-price').value);
+        formData.append('memberPrice', document.getElementById('edit-memberPrice').value);
         formData.append('stock', document.getElementById('edit-stock').value);
         formData.append('imageUrl', document.getElementById('edit-imageUrl').value);
 
