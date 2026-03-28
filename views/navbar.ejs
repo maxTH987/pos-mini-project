@@ -27,6 +27,9 @@
             <a class="saas-nav-link admin-only d-none" href="/staff" id="nav-staff">
                 <i class="fa-solid fa-user-shield"></i> จัดการพนักงาน
             </a>
+            <a class="saas-nav-link admin-only d-none" href="/settings" id="nav-settings">
+                <i class="fa-solid fa-cog"></i> ตั้งค่าระบบ
+            </a>
         </nav>
 
         <div class="saas-user-profile">
@@ -69,6 +72,7 @@
         if(path.includes('/members')) id = 'nav-members';
         if(path.includes('/reports')) id = 'nav-reports';
         if(path.includes('/staff')) id = 'nav-staff';
+        if(path.includes('/settings')) id = 'nav-settings';
         
         const el = document.getElementById(id);
         if(el) el.classList.add('active');
@@ -111,7 +115,7 @@
             }
         });
 
-        if(role === 'staff' && (window.location.pathname === '/staff' || window.location.pathname === '/reports')) {
+        if(role === 'staff' && (window.location.pathname === '/staff' || window.location.pathname === '/reports' || window.location.pathname === '/settings')) {
             window.location.href = '/';
         }
     }
