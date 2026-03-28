@@ -13,6 +13,7 @@ const saleSchema = new mongoose.Schema({
     
     subTotal: { type: Number, required: true }, 
     discount: { type: Number, default: 0 },     
+    usedPoints: { type: Number, default: 0 },
     netTotal: { type: Number, required: true }, 
 
     paymentMethod: { type: String, enum: ['cash', 'qr'], default: 'cash' },
