@@ -43,4 +43,15 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// 5. ดึงข้อมูลสมาชิกด้วยเบอร์โทร (สำหรับหน้าขาย)
+router.get('/phone/:phone', async (req, res) => {
+    try {
+        const member = await Member.findOne({ phone: req.params.phone });
+        if (!member) return res.status(404).json({ message: 'ไม่พบสมาชิก' });
+        res.json(member);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;
