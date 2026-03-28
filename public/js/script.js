@@ -136,8 +136,6 @@ function updateCart() {
 
     document.getElementById('cart-items').innerHTML = cartHtml;
     
-    // === การคำนวณส่วนลด ===
-    
     // 1. ส่วนลดจากแต้ม
     let pointDiscount = 0;
     let usedPoints = 0;

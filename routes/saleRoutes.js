@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
         let usedPoints = saleData.usedPoints || 0;
         
         if (saleData.memberPhone) {
-            // ซื้อทุกๆ 10 บาท ได้ 1 แต้ม (คิดจากยอดสุทธิ)
+            // ซื้อทุกๆ 10 บาท ได้ 1 แต้ม 
             earnedPoints = Math.floor(saleData.netTotal / 10); 
 
             // ค้นหาสมาชิกด้วยเบอร์โทร แล้วบวกแต้มที่ได้ หักแต้มที่ใช้

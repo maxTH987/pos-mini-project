@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Setting = require('../models/Setting');
 
-// Get all settings or a specific setting
 router.get('/', async (req, res) => {
     try {
         const { key } = req.query;
@@ -19,7 +18,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Update or create a setting
 router.post('/', async (req, res) => {
     try {
         const { key, value } = req.body;
