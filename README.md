@@ -13,6 +13,7 @@
 git clone [https://github.com/maxTH987/pos-mini-project.git](https://github.com/maxTH987/pos-mini-project.git)
 
 2.สร้างไฟล์ชื่อ .env แล้วเพิ่มโค้ดชุดนี้เพื่อเชื่อมต่อกับฐานข้อมูล
+
   PORT=3000
   MONGODB_URI=mongodb://localhost:27017/pos_db
 
