@@ -14,19 +14,36 @@
 
         <div class="row g-6" style="margin: 0;">
             <div class="col-xl-8 col-lg-7 p-0 pe-lg-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
+<% 
+    let categories = [];
+    if (products) {
+        categories = [...new Set(products.map(p => p.category))].filter(Boolean);
+    }
+%>
+                <div class="d-flex justify-content-between align-items-center mb-3">
                     <h2 class="saas-heading mb-0">เมนูสินค้า</h2>
                     <span class="saas-badge saas-badge-neutral">ทั้งหมด <%= products ? products.length : 0 %> รายการ</span>
                 </div>
                 
+                <% if (categories.length > 0) { %>
+                <div class="d-flex gap-2 mb-4" style="overflow-x: auto; padding-bottom: 5px;" id="category-filters">
+                    <button class="saas-btn saas-btn-primary rounded-pill px-4 cat-btn" onclick="filterCategory('all', this)">ทั้งหมด</button>
+                    <% categories.forEach(cat => { %>
+                        <button class="saas-btn saas-btn-neutral rounded-pill px-4 cat-btn" onclick="filterCategory('<%= cat %>', this)"><%= cat %></button>
+                    <% }) %>
+                </div>
+                <% } %>
+                
                 <div class="saas-pos-grid">
                     <% if (products && products.length> 0) { %>
                         <% products.forEach(function(product) { %>
-                            <div class="saas-surface saas-surface-hover p-0 d-flex flex-column h-100" style="cursor: pointer; overflow: hidden; border-radius: var(--radius-md);" 
+                            <div class="saas-surface product-card saas-surface-hover p-0 d-flex flex-column h-100" style="cursor: pointer; overflow: hidden; border-radius: var(--radius-md);" 
                                  data-id="<%= product._id %>" 
                                  data-name="<%= product.name %>" 
                                  data-price="<%= product.price %>" 
+                                 data-member-price="<%= product.memberPrice || '' %>"
                                  data-stock="<%= product.stock %>" 
+                                 data-category="<%= product.category %>"
                                  onclick="addToCart(this)">
                                 <div style="position: relative;">
                                     <img src="<%= product.imageUrl || 'https://placehold.co/400x300?text=No+Image' %>" 
@@ -43,10 +60,17 @@
                                 
                                 <div class="p-3 d-flex flex-column flex-grow-1 bg-white">
                                     <h6 class="mb-1 text-truncate" style="font-weight: 700; color: var(--saas-text-main);" title="<%= product.name %>"><%= product.name %></h6>
-                                    <div class="d-flex justify-content-between align-items-center mt-auto pt-2">
-                                        <span class="fw-bold" style="color: var(--saas-primary); font-size: 1.1rem;"><%= product.price %> ฿</span>
-                                        <% if(product.stock > 0) { %>
-                                            <span class="saas-badge saas-badge-neutral" style="font-size: 0.70rem;">สต๊อก: <%= product.stock %></span>
+                                    <div class="d-flex flex-column mt-auto pt-2">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="fw-bold" style="color: var(--saas-primary); font-size: 1.1rem;"><%= product.price %> ฿</span>
+                                            <% if(product.stock > 0) { %>
+                                                <span class="saas-badge saas-badge-neutral" style="font-size: 0.7rem;">สต๊อก: <%= product.stock %></span>
+                                            <% } %>
+                                        </div>
+                                        <% if (product.memberPrice) { %>
+                                            <div style="font-size: 0.8rem; font-weight: 600; color: #f59e0b; margin-top: 2px;">
+                                                <i class="fa-solid fa-crown" style="font-size: 0.7rem;"></i> พิเศษสำหรับสมาชิก <%= product.memberPrice %> ฿
+                                            </div>
                                         <% } %>
                                     </div>
                                 </div>
@@ -99,11 +123,24 @@
                             <input type="number" id="amount-paid" class="saas-input" placeholder="จำนวนเงิน">
                         </div>
 
-                        <div class="mb-4">
+                        <div class="mb-3">
                             <label class="saas-label" for="member-phone">เบอร์สมาชิก (ไม่บังคับ)</label>
-                            <div class="position-relative">
-                                <i class="fa-solid fa-phone position-absolute" style="top: 50%; left: 1rem; transform: translateY(-50%); color: var(--saas-text-muted);"></i>
-                                <input type="text" id="member-phone" class="saas-input pt-2 pb-2" style="padding-left: 2.5rem;" placeholder="08X-XXX-XXXX">
+                            <div class="d-flex gap-2 mb-2">
+                                <div class="position-relative flex-grow-1">
+                                    <i class="fa-solid fa-phone position-absolute" style="top: 50%; left: 1rem; transform: translateY(-50%); color: var(--saas-text-muted);"></i>
+                                    <input type="text" id="member-phone" class="saas-input pt-2 pb-2" style="padding-left: 2.5rem;" placeholder="08X-XXX-XXXX">
+                                </div>
+                                <button class="saas-btn saas-btn-neutral px-3" onclick="checkMember()">ตรวจสอบ</button>
+                            </div>
+                            
+                            <!-- พื้นที่แสดงข้อมูลสมาชิกหลังตรวจสอบ -->
+                            <div id="member-info-section" class="d-none p-3 saas-surface" style="border: 1px solid var(--border-subtle); border-radius: var(--radius-md); background: #f8fafc;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold text-primary" id="member-name-display">-</span>
+                                    <span class="saas-badge saas-badge-warning" id="member-points-display">0 แต้ม</span>
+                                </div>
+                                <label class="saas-label mt-2" style="font-size: 0.8rem;">ใช้แต้มเป็นส่วนลด (10 แต้ม = 1 ฿)</label>
+                                <input type="number" id="use-points-input" class="saas-input form-control-sm" placeholder="ใส่จำนวนแต้มที่ต้องการใช้" onchange="updateCart()" onkeyup="updateCart()" min="0">
                             </div>
                         </div>
 
@@ -121,6 +158,26 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/script.js"></script>
+    <script>
+        function filterCategory(category, btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => {
+                b.classList.remove('saas-btn-primary');
+                b.classList.add('saas-btn-neutral');
+            });
+            btn.classList.remove('saas-btn-neutral');
+            btn.classList.add('saas-btn-primary');
 
+            const items = document.querySelectorAll('.product-card');
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.classList.remove('d-none');
+                    item.classList.add('d-flex');
+                } else {
+                    item.classList.remove('d-flex');
+                    item.classList.add('d-none');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
