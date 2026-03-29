@@ -153,7 +153,7 @@ function updateCart() {
     const currentM = now.getMinutes();
     const currentMinutes = currentH * 60 + currentM;
 
-    // ป้องกันกรณี admin ลืมกรอกหรือกรอกผิดฟอร์แมต
+    // ป้องกันกรณี admin ลืมกรอกหรือกรอกผิด
     let isHappyHour = false;
     if (promoSettings && promoSettings.start && promoSettings.end) {
         const startParts = promoSettings.start.split(':');
@@ -171,7 +171,7 @@ function updateCart() {
     }
 
     if (isHappyHour) {
-        // ลดเปอร์เซ็นต์จากยอด subTotal หลังหักส่วนลดแต้มไปก่อนหรือคิดรวมเลยก็ได้ (ปกติมักจะคิดจากยอดที่ลดแต้มแล้ว)
+        
         let subtotalAfterPoints = subTotal - pointDiscount;
         if (subtotalAfterPoints < 0) subtotalAfterPoints = 0;
         let p = parseFloat(promoSettings.discountPercent) || 0;
