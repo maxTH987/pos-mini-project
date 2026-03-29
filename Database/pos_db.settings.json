@@ -1,0 +1,12 @@
+[{
+  "_id": {
+    "$oid": "69c7dafe2e7e4fb96028da70"
+  },
+  "key": "happyHour",
+  "__v": 0,
+  "value": {
+    "start": "20:00",
+    "end": "21:00",
+    "discountPercent": 10
+  }
+}]

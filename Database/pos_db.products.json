@@ -7,16 +7,17 @@
   "description": "น้ำดื่มสะอาด",
   "cost": 5,
   "price": 10,
-  "stock": 81,
+  "stock": 75,
   "category": "Beverage",
   "createdAt": {
     "$date": "2026-02-26T13:18:55.300Z"
   },
   "updatedAt": {
-    "$date": "2026-03-15T14:58:52.712Z"
+    "$date": "2026-03-28T13:55:20.616Z"
   },
   "__v": 0,
-  "imageUrl": "https://d19oj5aeuefgv.cloudfront.net/0023008"
+  "imageUrl": "https://d19oj5aeuefgv.cloudfront.net/0023008",
+  "memberPrice": 9
 },
 {
   "_id": {
@@ -34,9 +35,10 @@
     "$date": "2026-02-26T18:02:05.455Z"
   },
   "updatedAt": {
-    "$date": "2026-02-27T13:42:36.906Z"
+    "$date": "2026-03-28T13:54:45.071Z"
   },
-  "__v": 0
+  "__v": 0,
+  "memberPrice": 18
 },
 {
   "_id": {
@@ -47,16 +49,17 @@
   "description": "",
   "cost": 14,
   "price": 16,
-  "stock": 87,
+  "stock": 80,
   "category": "Beverage",
   "imageUrl": "/uploads/1772130214460-663df8b5642e2_74909-1-l__960x960xsquare-removebg-preview.png",
   "createdAt": {
     "$date": "2026-02-26T18:23:34.590Z"
   },
   "updatedAt": {
-    "$date": "2026-03-15T15:27:10.781Z"
+    "$date": "2026-03-28T13:55:20.614Z"
   },
-  "__v": 0
+  "__v": 0,
+  "memberPrice": 15
 },
 {
   "_id": {
@@ -67,16 +70,17 @@
   "description": "",
   "cost": 20,
   "price": 25,
-  "stock": 88,
+  "stock": 80,
   "category": "Beverage",
   "imageUrl": "https://www.cocomax.com/images/demo2023/productscocomax/2025-04-29_162819.png",
   "createdAt": {
     "$date": "2026-02-26T18:43:37.319Z"
   },
   "updatedAt": {
-    "$date": "2026-02-27T14:39:03.259Z"
+    "$date": "2026-03-28T13:55:20.616Z"
   },
-  "__v": 0
+  "__v": 0,
+  "memberPrice": 22
 },
 {
   "_id": {
@@ -87,14 +91,115 @@
   "description": "",
   "cost": 15,
   "price": 20,
-  "stock": 2,
+  "stock": 0,
   "category": "Beverage",
   "imageUrl": "https://www.bar24store.com/contents/products/sizes/45.png",
   "createdAt": {
     "$date": "2026-02-26T18:47:11.841Z"
   },
   "updatedAt": {
-    "$date": "2026-03-15T14:58:52.713Z"
+    "$date": "2026-03-28T13:55:01.040Z"
+  },
+  "__v": 0,
+  "memberPrice": 17
+},
+{
+  "_id": {
+    "$oid": "69c7e02f9e15126835b92751"
+  },
+  "barcode": "88500000000056",
+  "name": "เลย์",
+  "cost": 15,
+  "price": 20,
+  "memberPrice": 18,
+  "stock": 75,
+  "category": "Snack",
+  "imageUrl": "https://obs-ect.line-scdn.net/r/ect/ect/cj00YXQ1amRsczBtY3BuJnM9anA2JnQ9bSZ1PTFmdmJ0bnQxODNvMDAmaT0w",
+  "createdAt": {
+    "$date": "2026-03-28T14:05:35.958Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-28T14:05:35.958Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c7e1779e15126835b92774"
+  },
+  "barcode": "88500000000057",
+  "name": "แจ็กซ์ มันฝรั่งแท่งพร้อมซอสพริก 45 กรัม",
+  "cost": 15,
+  "price": 20,
+  "memberPrice": 18,
+  "stock": 64,
+  "category": "Snack",
+  "imageUrl": "/uploads/1774707063274-378120-02-allonline-sm-v4.png",
+  "createdAt": {
+    "$date": "2026-03-28T14:11:03.303Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-28T14:11:03.303Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c7e2f19e15126835b9277a"
+  },
+  "barcode": "88500000000091",
+  "name": "นีเวียซัน กันแดดผิวกาย เอ็กซ์ตร้า โพรเท็ค เดลี่ โกลว์ บอดี้ เอสพีเอฟ50 พีเอ+++ 180 มล.",
+  "cost": 150,
+  "price": 199,
+  "memberPrice": 189,
+  "stock": 39,
+  "category": "Skincare",
+  "imageUrl": "https://img.nivea.com/-/media/miscellaneous/media-center-items/b/0/f/5c1856824ce7440d9d507c0e52b910a6-web_1010x1180_transparent_png.png",
+  "createdAt": {
+    "$date": "2026-03-28T14:17:21.208Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-28T14:17:21.208Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c7e37d9e15126835b92780"
+  },
+  "barcode": "88500000000092",
+  "name": "Baby Bright โลชั่นกันแดดผิวกาย Apple Honey Sun Lotion SPF30 PA+++ 450 มล.",
+  "cost": 120,
+  "price": 179,
+  "memberPrice": 169,
+  "stock": 43,
+  "category": "Skincare",
+  "imageUrl": "/uploads/1774707581889-669811-00-allonline-bt.png",
+  "createdAt": {
+    "$date": "2026-03-28T14:19:41.909Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-28T14:19:41.909Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "69c7e4019e15126835b92786"
+  },
+  "barcode": "88500000000093",
+  "name": "นีเวีย ซัน โลชั่น มอยส์เจอร์ อาฟเตอร์ซัน 200 มล.",
+  "cost": 200,
+  "price": 273,
+  "memberPrice": 250,
+  "stock": 68,
+  "category": "Skincare",
+  "imageUrl": "/uploads/1774707713298-586081-00-body-sunblock-nivea.png",
+  "createdAt": {
+    "$date": "2026-03-28T14:21:53.329Z"
+  },
+  "updatedAt": {
+    "$date": "2026-03-28T14:21:53.329Z"
   },
   "__v": 0
 }]
